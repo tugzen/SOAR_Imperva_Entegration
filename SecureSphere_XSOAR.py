@@ -12,23 +12,16 @@ from typing import Any, Dict, Tuple, List, Optional, Union, cast
 
 '''CONSTANTS'''
 
-URL='https://10.115.206.53:8083/SecureSphere/api/v1/auth/session'
+URL='https://<IP>:8083/SecureSphere/api/v1/auth/session'
 
 class ImpervaApi:
-    # credentials= '{tugrul.zengin}{1841tZ1q!1841}'
-    # credentials_bytes = credentials.encode('ascii')
-    # base64_bytes = base64.b64encode(credentials_bytes)
-    # base64_credentials = base64_bytes.decode('ascii')
-#encoded_credentials= base64.
-
-#print(base64_credentials)
-
+   
     def __init__(self, username,password):
         self.username=username
         self.password=password
 
 
-#
+
     def encoding(self):
 
         credentials= self.username + ":" + self.password
@@ -119,20 +112,14 @@ class ImpervaApi:
         if login_request['success']:
             urlagent=f'https://10.115.206.53:8083/SecureSphere/api/v1/conf/agents/{agentname}/GeneralDetails'
             response = requests.get(urlagent, cookies={'JSESSIONID': login_request["session-id"]}, verify=False)
-            #print(response.json())
-            #print('Finished')
+          
             response_from_api=response.json()
-            #k['test']='Deneme123'
-            #k['test2']='Deneme2'
-            #k=OrderedDict(reversed(list(k.items())))
+            
             print(response_from_api)
-            #response_from_api=str(k).replace("'", '"')
-            #response_from_api=k
-            #response_from_api={ "status": { "general-status": "Running", "start-time": "2021-09-07 10:03:27.0", "last-status-update": "Thu Sep 09 14:38:49 AST 2021", "last-activity": "1631187534064", "throughput-kb": "40", "connections-per-sec": "0", "hits-per-sec": "5", "cpu-utilization": "0" }, "properties": { "Agent Version": "14.1.0.10.0.562097", "Platform": "AMD64", "Hostname": "DTEKEBADBT1", "Operating System": "Microsoft Windows Server 2016 Standard Edition, 64-bit", "Kernel Patch": " (build 14393)" }, "general-info": { "name": "DTEKEBADBT1", "ip": "10.115.210.50", "creation-time": "2020-07-17 16:03:33.0", "manual-settings-activation": "Off" }, "test": "Deneme123" }
-
+            
             print (response_from_api)
 
-            #test_format0
+           
 
             command_results=CommandResults(
                 readable_output=f'##{response_from_api}',
@@ -238,26 +225,7 @@ def main():
             agentname=args.get('name')
             return_results(test.agent_restart(agentname))
 
-        elif demisto.command() == 'helloworld-say-hello':
-            return_results(say_hello_command(client, demisto.args()))
 
-        elif demisto.command() == 'helloworld-search-alerts':
-            return_results(search_alerts_command(client, demisto.args(name)))
-
-        elif demisto.command() == 'helloworld-get-alert':
-            return_results(get_alert_command(client, demisto.args()))
-
-        elif demisto.command() == 'helloworld-update-alert-status':
-            return_results(update_alert_status_command(client, demisto.args()))
-
-        elif demisto.command() == 'helloworld-scan-start':
-            return_results(scan_start_command(client, demisto.args()))
-
-        elif demisto.command() == 'helloworld-scan-status':
-            return_results(scan_status_command(client, demisto.args()))
-
-        elif demisto.command() == 'helloworld-scan-results':
-            return_results(scan_results_command(client, demisto.args()))
 
     # Log exceptions and return errors
     except Exception as e:
