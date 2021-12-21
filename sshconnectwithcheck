@@ -1,0 +1,39 @@
+#!/usr/bin/pyhton3
+
+import paramiko
+import sys
+ip=sys.argv[1]
+hostname = "192.168.36.140"
+username = "root"
+password = "Pass12341q!"
+cmd1 = f'cat /tmp/ipblacklist | grep {ip}'
+cmd2=f'echo {ip}  >> /tmp/ipblacklist'
+try:
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(hostname,username=username,password=password)
+    print("Connected to %s" % hostname)
+except paramiko.AuthenticationException:
+    print("Failed to connect to %s due to wrong username/password" %hostname)
+    exit(1)
+except Exception as e:
+    print(e.message)
+    exit(2)
+try:
+    stdin, stdout, stderr = ssh.exec_command(cmd1)
+
+except Exception as e:
+    print (e.message)
+
+err = ''.join(stderr.readlines())
+out = ''.join(stdout.readlines())
+grep=out.split("\n")[0]
+print(grep)
+print(ip)
+if grep==ip:
+    print('İp is already in the list')
+    sys.exit()
+else:
+    stdin, stdout, stderr = ssh.exec_command(cmd2)
+    print('ip is successfully added.')
+
